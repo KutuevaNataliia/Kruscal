@@ -13,12 +13,11 @@ int comp(const int* i, const int* j)
     return *i - *j;
 }
 
-void init(int n, int* parent, int* w)
+void init(int n, int* parent)
 {
     for (int i = 0; i < n; i++)
     {
         parent[i] = i;
-        w[i] = 1;
     }
 }
 int getRep(int i, int* parent)
@@ -30,7 +29,7 @@ int getRep(int i, int* parent)
     return parent[i];
 }
 
-void link(int u, int v, int* parent, int* w)
+void link(int u, int v, int* parent)
 {
     int tu = getRep(u, parent);
     int tv = getRep(v, parent);
@@ -39,11 +38,9 @@ void link(int u, int v, int* parent, int* w)
     if (std::rand() % 2)
     {
         parent[u] = v;
-        w[v] += w[u];
     }
     else {
         parent[v] = u;
-        w[u] += w[v];
     }
 }
 
@@ -51,8 +48,7 @@ int kruscal(Edge* edges, int n, int m)
 {
     int cost = 0;
     int* parent = new int[n];
-    int* w = new int[n];
-    init(n, parent, w);
+    init(n, parent);
     for (int i = 0; i < m; i++)
     {
         int u = getRep(edges[i].start - 'a', parent);
@@ -61,7 +57,7 @@ int kruscal(Edge* edges, int n, int m)
         {
             std::cout << edges[i].start << ' ' << edges[i].finish << std::endl;
             cost += edges[i].weight;
-            link(u, v, parent, w);
+            link(u, v, parent);
         }
     }
     return cost;
@@ -70,7 +66,7 @@ int kruscal(Edge* edges, int n, int m)
 int main()
 {
     int n, m;
-    std::ifstream input("test2.txt");
+    std::ifstream input("test1.txt");
     if (!input)
     {
         exit(1);
@@ -88,6 +84,3 @@ int main()
     int cost = kruscal(edges, n, m);
     std::cout << "Cost = " << cost << std::endl;
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
